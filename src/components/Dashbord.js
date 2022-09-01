@@ -43,10 +43,15 @@ function Dashbord() {
     }, [loginData])
 
     const navigate = useNavigate()
+    const logout = async () => {
+        localStorage.removeItem("loginData",loginData.id);
+        navigate('/login');
+    };
 
     return (
         <div>
             <Container>
+                <Button className="col-md-2" onClick={() => logout()}>Logout</Button>
                 <Row className="col-md-12 p-4">
                     <Col>
                         <Card.Header>Welcome {loginData.username}</Card.Header>

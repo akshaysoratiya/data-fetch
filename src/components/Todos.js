@@ -5,7 +5,6 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 
 function Todos() {
     const { loginData } = useContext(GlobalContext);
@@ -15,7 +14,7 @@ function Todos() {
             const post = await axios.get(`https://jsonplaceholder.typicode.com/todos?userId=${loginData.id}`)
             SetTodoData(post.data)
         })()
-    }, [])
+    }, [loginData])
     return (
         <div>
 

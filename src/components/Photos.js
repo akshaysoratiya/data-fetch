@@ -5,18 +5,22 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string'
 
 function Photos() {
   const { loginData } = useContext(GlobalContext);
   const [photodata, SetPhotoData] = useState([]);
+  let { search } = useLocation()
+  let { albumId } = queryString.parse(search)
 
   useEffect(() => {
     (async () => {
-      const photo = await axios.get(`https://jsonplaceholder.typicode.com/photos?albumId=${loginData.id}`)
-      SetPhotoData(photo.data)
-
+      const post = await axios.get(`https://jsonplaceholder.typicode.com/albums?userId=${albumId}`)
+      Promise.all(post.data.map(r => axios.get(`https://jsonplaceholder.typicode.com/photos?albums=${r.id}`).then(res => { SetPhotoData(res.data) }))
+      )
     })()
-  }, [])
+  }, [loginData])
   return (
     <div>
         <Container>

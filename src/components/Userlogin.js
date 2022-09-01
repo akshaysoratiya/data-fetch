@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContext } from "../context/Globalcontext";
-import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -18,16 +17,12 @@ function Userlogin() {
     // const [users, setUsers] = useState({});
     const [email, setEmail] = useState();
     const { loginData, setUserDetails } = useContext(GlobalContext);
-    const navigate = useNavigate();
-
-    // console.log(store);
+    const navigate = useNavigate()
     const login = async () => {
-        // console.log(login);
-        //  navigate("/users")
 
         const url = `https://jsonplaceholder.typicode.com/users?email=${email}`;
         axios.get(url).then((responce) => setUserDetails(responce.data[0]));
-        navigate("/dashboard")
+        navigate('/dashboard');
 
     };
 
@@ -46,7 +41,7 @@ function Userlogin() {
                 </Col>
             </Row>
             <Row className="p-3 justify-content-center">
-                <Button className="col-md-2" onClick={() => login()}>Submit</Button>
+                <Button className="col-md-2" onClick={() => login()}>Login</Button>
             </Row>
         </Container>
         // <div>

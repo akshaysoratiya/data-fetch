@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 function Albums() {
     const { loginData } = useContext(GlobalContext);
     const [albumdata, SetAlbumData] = useState([]);
-    const [photodata, SetPhotoData] = useState([]);
+    // const [photodata, SetPhotoData] = useState([]);
 
     const navigate = useNavigate()
 
@@ -19,12 +19,15 @@ function Albums() {
     useEffect(() => {
         (async () => {
             const post = await axios.get(`https://jsonplaceholder.typicode.com/albums?userId=${loginData.id}`)
-            SetAlbumData(post.data)
-            const photo = await axios.get(`https://jsonplaceholder.typicode.com/photos?albumId=${loginData.id}`)
-            SetPhotoData(photo.data.length)
-
+            // SetAlbumData(post.data)
+            // const photo = await axios.get(`https://jsonplaceholder.typicode.com/photos?albumId=${loginData.id}`)
+            // SetPhotoData(photo.data.length)
+            Promise.all(post.data.map(r => axios.get(`https://jsonplaceholder.typicode.com/photos?albumId=${r.id}`).then(res => ({ ...r, photoCount: res.data.length })))
+            ).then(data => {
+                SetAlbumData(data);
+            })()
         })()
-    }, [])
+    }, [loginData])
 
 
     return (
@@ -38,13 +41,13 @@ function Albums() {
                                     <Card.Title>{post.title}</Card.Title>
                                 </Card.Body>
                             </Card>
+                            <Button onClick={() => navigate(`/photos?albumId=${post.id}`)}>Photos - {post.photoCount}</Button>
                         </Col>
                     )}
-                <Button onClick={() => navigate('/photos')}>Photos - {photodata}</Button>
                 </Row>
             </Container>
         </div>
     )
-}
+}   
 
 export default Albums

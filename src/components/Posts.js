@@ -13,17 +13,18 @@ import Button from 'react-bootstrap/Button';
 function Posts() {
     const { loginData } = useContext(GlobalContext);
     const [postdata, SetPostData] = useState([]);
-    const [commentdata, SetCommentData] = useState([]);
     const navigate = useNavigate()
 
     useEffect(() => {
         (async () => {
             const post = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${loginData.id}`)
-            SetPostData(post.data)
-            const comments = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${loginData.id}`)
-            SetCommentData(comments.data.length)
+            Promise.all(post.data.map(r => axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${r.id}`).then(res => ({ ...r, commentCount: res.data.length })))
+            ).then(data => {
+                SetPostData(data);
+            })()
         })()
     }, [loginData])
+
     return (
         <div>
 
@@ -37,7 +38,7 @@ function Posts() {
                                     <Card.Text>
                                         {post.body}
                                     </Card.Text>
-                                    <Button onClick={() => navigate('/comments')}>Comments - {commentdata}</Button>
+                                    <Button onClick={() => navigate(`/comments?postId=${post.id}`)}>Comments - {post.commentCount}</Button>
                                 </Card.Body>
                             </Card>
                         </Col>

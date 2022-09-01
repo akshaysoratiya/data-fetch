@@ -5,18 +5,24 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string'
 
 
 
 function Comments() {
   const { loginData } = useContext(GlobalContext);
   const [commentdata, SetCommentData] = useState([]);
+  let { search } = useLocation()
+  let { postId } = queryString.parse(search)
 
   useEffect(() => {
     (async () => {
-      const comments = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${loginData.id}`)
-      SetCommentData(comments.data)
+
+      const post = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${postId}`)
+      Promise.all(post.data.map(r => axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${r.id}`).then(res => { SetCommentData(res.data) }))
+      )
+
     })()
   }, [loginData])
   return (

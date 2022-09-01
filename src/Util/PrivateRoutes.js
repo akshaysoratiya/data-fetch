@@ -1,13 +1,14 @@
 import React, { useContext } from 'react'
+import { Outlet, Navigate } from 'react-router-dom';
 import { GlobalContext } from '../context/Globalcontext';
 
 function PrivateRoutes() {
 
     const { loginData } = useContext(GlobalContext);
-  return (
-    <div>
+    let auth = { 'token': loginData.id }
 
-    </div>
+    return (
+        auth.token ? <Outlet /> : <Navigate to='/login' />
   )
 }
 
