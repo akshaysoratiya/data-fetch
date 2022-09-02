@@ -22,7 +22,8 @@ function Comments() {
       const post = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${postId}`)
       Promise.all(post.data.map(r => axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${r.id}`).then(res => { SetCommentData(res.data) }))
       )
-
+      // const res = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${postId}}`)
+      // SetCommentData(res.data)
     })()
   }, [loginData])
   return (

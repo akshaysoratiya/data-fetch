@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button';
 
 
 function Dashbord() {
-    const { loginData } = useContext(GlobalContext);
+    const { loginData, setUserDetails } = useContext(GlobalContext);
     const [postCount, setPostCount] = useState(null);
     const [albumCount, setAlbumCount] = useState(null);
     const [todoCount, setTodoCount] = useState(null);
@@ -44,7 +44,8 @@ function Dashbord() {
 
     const navigate = useNavigate()
     const logout = async () => {
-        localStorage.removeItem("loginData",loginData.id);
+        localStorage.removeItem("loginData",loginData);
+        setUserDetails({});
         navigate('/login');
     };
 

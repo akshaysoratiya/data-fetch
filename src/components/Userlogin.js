@@ -35,7 +35,7 @@ function Userlogin() {
                         <Form.Control onChange={e => setEmail(e.target.value)}
                             placeholder="Enter email"
                             aria-label="Enter email"
-                            aria-describedby="basic-addon1"
+                            aria-describedby="basic-addon1" 
                         />
                     </InputGroup>
                 </Col>
